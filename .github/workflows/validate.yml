@@ -25,23 +25,25 @@ jobs:
 
       - name: JSON files parse
         run: |
-          for f in .mcp.json .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
+          for f in plugin.json .mcp.json .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
             jq empty "$f"
             echo "ok: $f"
           done
 
       - name: Versions match and have a changelog entry
         run: |
-          plugin=$(jq -r '.version // empty' .claude-plugin/plugin.json)
+          openai=$(jq -r '.version // empty' plugin.json)
+          claude=$(jq -r '.version // empty' .claude-plugin/plugin.json)
           market=$(jq -r '.plugins[] | select(.name == "postbeam-starter") | .version // empty' .claude-plugin/marketplace.json)
-          echo "plugin.json: ${plugin:-missing}"
-          echo "marketplace.json: ${market:-missing}"
-          if [ -z "$plugin" ] || [ "$plugin" != "$market" ]; then
-            echo "::error::version must be set and identical in plugin.json and marketplace.json"
+          echo "plugin.json: ${openai:-missing}"
+          echo ".claude-plugin/plugin.json: ${claude:-missing}"
+          echo ".claude-plugin/marketplace.json: ${market:-missing}"
+          if [ -z "$claude" ] || [ "$claude" != "$market" ] || [ "$claude" != "$openai" ]; then
+            echo "::error::version must be set and identical in plugin.json, .claude-plugin/plugin.json and .claude-plugin/marketplace.json"
             exit 1
           fi
-          if ! grep -qF "## [$plugin]" CHANGELOG.md; then
-            echo "::error file=CHANGELOG.md::no entry for version $plugin"
+          if ! grep -qF "## [$claude]" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::no entry for version $claude"
             exit 1
           fi
 
@@ -99,3 +101,41 @@ jobs:
           else
             echo "This Claude Code version has no 'plugin validate' command. Skipping."
           fi
+
+      - name: ChatGPT listing fields fit the directory limits
+        run: |
+          jq -e '
+            .["$schema"] == "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+            and (.name | test("^[a-z0-9]+(-[a-z0-9]+)*$")) and (.name | length) <= 64
+            and (.extensions["com.openai"].interface as $i
+              | ($i.displayName | length) > 0 and ($i.displayName | length) <= 30
+              and ($i.shortDescription | length) > 0 and ($i.shortDescription | length) <= 30
+              and ($i.longDescription | length) > 0 and ($i.longDescription | length) <= 4000
+              and ($i.developerName | length) > 0 and ($i.developerName | length) <= 80
+              and ($i.category | length) > 0
+              and ($i.defaultPrompt | length) <= 3
+              and ($i.defaultPrompt | all(length <= 128))
+              and ([$i.websiteURL, $i.supportURL, $i.privacyPolicyURL, $i.termsOfServiceURL] | all(startswith("https://"))))
+          ' plugin.json > /dev/null
+          for key in onboardingSkill; do
+            path=$(jq -r --arg k "$key" '.extensions["com.openai"][$k] // empty' plugin.json)
+            test -f "$path" || { echo "::error file=plugin.json::$key points to a missing file: $path"; exit 1; }
+          done
+          for key in composerIcon logo; do
+            path=$(jq -r --arg k "$key" '.extensions["com.openai"].interface[$k] // empty' plugin.json)
+            test -f "$path" || { echo "::error file=plugin.json::$key points to a missing file: $path"; exit 1; }
+          done
+          echo "ok: plugin.json"
+
+      - name: Build the ChatGPT package
+        run: |
+          version=$(jq -r '.version' plugin.json)
+          mkdir -p dist
+          zip -r -X "dist/postbeam-starter-$version.zip" plugin.json skills assets LICENSE README.md
+          unzip -l "dist/postbeam-starter-$version.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: postbeam-starter-chatgpt-package
+          path: dist/*.zip
+          if-no-files-found: error

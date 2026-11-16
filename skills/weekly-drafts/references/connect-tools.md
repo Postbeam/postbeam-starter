@@ -8,7 +8,13 @@ Every tool here is optional. Help with the ones the user picked and nothing else
 - If Postbeam Starter is installed as a plugin: Granola, Fireflies, Slack, Gmail and Microsoft 365 are listed at Customize → Plugins → Postbeam Starter → Connectors. They select Add or Connect next to the tool.
 - For any other tool, or without the plugin: Customize → Connectors, search for the tool, then Connect.
 
-Outlook and Teams connect through Microsoft 365. On a work Microsoft account, their Microsoft admin may have to approve it once. If the app says they cannot add a connector at all, their workspace owner has to add it first.
+Outlook and Teams connect through Microsoft 365, one connector that also covers calendar and files. On a work Microsoft account, their Microsoft admin may have to approve it once. If the app says they cannot add a connector at all, their workspace owner has to add it first.
+
+## ChatGPT (web, desktop, mobile)
+
+- They open Plugins in the sidebar, or go to `chatgpt.com/plugins`, search for the tool, select the plus button next to it and sign in.
+- The plugins there are named Granola, Fireflies, Slack, Gmail, Outlook Email and Teams. Zoom has one too. Outlook and Teams are separate plugins, so they add only the one they want read.
+- If a tool has no plugin in the directory, use the fallback below.
 
 ## Claude Code
 

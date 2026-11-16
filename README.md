@@ -26,6 +26,12 @@ If Postbeam Starter appears under **Discover**, add it from there instead of add
 
 Then run `/mcp`, pick `postbeam` and sign in.
 
+### ChatGPT
+
+Postbeam Starter is not in the ChatGPT plugin directory yet. OpenAI is not accepting skills-only plugins there at the moment. The package for it is ready in this repository (`plugin.json`), and the setup already knows the ChatGPT steps for connecting Postbeam and your other tools.
+
+In Codex, install the setup with the `npx skills` command below.
+
 ### Cursor, Codex and other agents
 
 ```bash

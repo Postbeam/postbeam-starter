@@ -1,0 +1,51 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "postbeam-starter",
+  "version": "1.2.0",
+  "description": "Get fresh LinkedIn drafts in Postbeam every week, written in your voice from your real week. A guided setup connects Postbeam, lets you choose which work tools may be read (call recorder, Slack, Gmail or Outlook, or none), and creates the weekly routine.",
+  "author": {
+    "name": "Postbeam",
+    "email": "support@postbeam.ai",
+    "url": "https://www.postbeam.ai"
+  },
+  "homepage": "https://www.postbeam.ai",
+  "repository": "https://github.com/Postbeam/postbeam-starter",
+  "license": "MIT",
+  "keywords": [
+    "linkedin",
+    "social-media",
+    "content",
+    "ghostwriting",
+    "weekly-routine"
+  ],
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/weekly-drafts/SKILL.md",
+      "interface": {
+        "displayName": "Postbeam Starter",
+        "shortDescription": "Weekly LinkedIn drafts setup",
+        "longDescription": "Postbeam Starter sets up a weekly routine that turns your real working week into LinkedIn drafts waiting in your Postbeam account.\n\nA guided setup takes about five minutes. It checks that Postbeam is connected, asks which of your work tools may be read (meeting notes from Granola or Fireflies, Slack, Gmail, Outlook or Teams, or none of them), agrees the schedule with you, writes a first batch of drafts with you, and then creates the weekly task.\n\nEach week the routine reads only the tools you approved, picks a few moments worth posting about, writes one draft per moment in the voice described by your Postbeam training, and saves the drafts to Postbeam with a note on where each idea came from. Client names, private numbers and deal terms are left out unless they are already public.\n\nNothing is published or scheduled to LinkedIn by the routine. Every post waits in Postbeam as a draft until you approve it.\n\nRequirements and limits: you need a Postbeam account and the Postbeam plugin, which this setup helps you connect. Every other tool is optional. If you connect none, the routine asks you a few short questions about your week and drafts from your answers. In a quiet week it writes fewer drafts and never invents material.",
+        "developerName": "Postbeam.ai",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Guided setup",
+          "Weekly LinkedIn drafts"
+        ],
+        "websiteURL": "https://www.postbeam.ai",
+        "supportURL": "https://app.postbeam.ai/",
+        "privacyPolicyURL": "https://www.postbeam.ai/privacy-policy",
+        "termsOfServiceURL": "https://www.postbeam.ai/terms",
+        "defaultPrompt": [
+          "Set up my weekly LinkedIn drafts.",
+          "Write this week's LinkedIn drafts from my real week.",
+          "Change which tools my weekly drafts routine reads."
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "publication": {
+        "release_notes": "First release for ChatGPT and Codex. A guided setup that connects Postbeam, lets you choose which work tools are read, and creates a weekly task that saves LinkedIn drafts to Postbeam."
+      }
+    }
+  }
+}

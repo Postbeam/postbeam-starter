@@ -10,6 +10,14 @@ Give the user only the section for where they are running. Every path ends with 
 - If it is not: Customize → Connectors, search for "Postbeam", then Connect and sign in. Installing the Postbeam Starter plugin adds it too.
 - If the app says they cannot add connectors, their workspace owner has to enable Postbeam first.
 
+## ChatGPT (web, desktop, mobile)
+
+1. They open Plugins in the sidebar, or go to `chatgpt.com/plugins`, and search for "Postbeam".
+2. They select the plus button next to Postbeam, or open it if it is already added, and sign in to their Postbeam account when asked.
+3. They come back to this chat. If the Postbeam tools still do not show up, they start a new chat and run the setup again.
+
+In a company workspace, an admin may have to allow the plugin first.
+
 ## Claude Code
 
 - Check `/mcp` first. If `postbeam` is listed, because Postbeam Starter is installed as a plugin or because Postbeam is already connected on their Claude account, they pick it and authenticate.
@@ -46,7 +54,7 @@ Give the user only the section for where they are running. Every path ends with 
 
 2. They restart Codex.
 
-The Codex CLI, IDE extension and desktop app share this setup. In the desktop app the same thing is under Settings → MCP servers, with an Authenticate button.
+The Codex CLI, IDE extension and desktop app share this setup. In the desktop app the same thing is under Settings → MCP servers, with an Authenticate button. They can also add the Postbeam plugin from the Plugins Directory there, as in ChatGPT.
 
 ## Something else
 

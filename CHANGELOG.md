@@ -2,6 +2,18 @@
 
 All notable changes to Postbeam Starter. Versions follow [semantic versioning](https://semver.org), and each release is tagged `v{version}`.
 
+## [1.2.0] - 2026-11-16
+
+### Added
+
+- A package for ChatGPT and Codex: `plugin.json` at the repository root, with the listing text, icon and starter prompts for OpenAI's plugin directory. OpenAI is not accepting skills-only plugins there at the moment, so it is not listed yet.
+- Connect steps for ChatGPT in both reference files, and a note on creating the weekly task in ChatGPT.
+- The checks build the ZIP that gets uploaded to OpenAI's plugin portal and keep its version in step with the Claude manifests.
+
+### Changed
+
+- The skill description no longer names one assistant, and the skill states that the user's instructions come before its defaults.
+
 ## [1.1.0] - 2026-11-16
 
 ### Added
