@@ -19,6 +19,10 @@
     "gmail": {
       "type": "http",
       "url": "https://gmailmcp.googleapis.com/mcp/v1"
+    },
+    "microsoft365": {
+      "type": "http",
+      "url": "https://microsoft365.mcp.claude.com/mcp"
     }
   }
 }
