@@ -1,0 +1,23 @@
+{
+  "name": "postbeam-starter",
+  "displayName": "Postbeam Starter",
+  "version": "1.0.0",
+  "description": "Get fresh LinkedIn drafts in Postbeam every week, written in your voice from your real week. Connect Postbeam, choose which work tools Claude may read (call recorder, Slack, Gmail, or none), and a guided setup creates the weekly routine.",
+  "author": {
+    "name": "Postbeam",
+    "email": "support@postbeam.ai",
+    "url": "https://www.postbeam.ai"
+  },
+  "homepage": "https://www.postbeam.ai",
+  "privacyPolicyUrl": "https://www.postbeam.ai/privacy-policy",
+  "repository": "https://github.com/Postbeam/postbeam-starter",
+  "license": "MIT",
+  "keywords": [
+    "linkedin",
+    "social-media",
+    "content",
+    "ghostwriting",
+    "weekly-routine",
+    "mcp"
+  ]
+}
