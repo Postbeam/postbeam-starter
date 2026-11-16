@@ -11,18 +11,35 @@ Setup is finished when three things are true:
 
 - A first batch of drafts has landed in their Postbeam account, so they have seen it work.
 - The routine repeats on its own each week, or they hold a prompt that runs it.
-- They know exactly what Claude reads, and that nothing is published without them.
+- They know exactly what the routine reads, and that nothing is published without them.
 
 The people using this are mostly founders and executives, not engineers. Keep it conversational: plain words, one question at a time, and a sensible default with every question so they can just say yes. The whole setup should cost them about five minutes of attention.
 
 If they came back to change, pause or re-run a routine they already have, or to add another tool to it, skip to the step that covers it. Find the existing routine with the scheduling tool if there is one; otherwise hand them an edited prompt.
 
+## Where you are running
+
+This skill gets installed in several ways: as the Postbeam Starter plugin in the Claude app, as a Claude Code plugin, or as a plain skill in Claude Code, Cursor, Codex or another agent. The routine is the same everywhere. What differs is how the user connects Postbeam and their other tools.
+
+If you know which app you are running in, use that. If you don't, ask the user one question with these choices: Claude app (web, desktop or mobile), Claude Code, Cursor, Codex, something else. You only need the answer when something has to be connected, so skip the question when everything they want is already available.
+
+The connection steps are in two files in this skill's folder, each with one section per environment:
+
+- `references/connect-postbeam.md` for Postbeam itself.
+- `references/connect-tools.md` for the optional tools.
+
+Read the file when you need it, and give the user only the section that matches where they are.
+
 ## 1. Check Postbeam is connected
 
-Postbeam is the only connector this routine needs. Call `list_accounts`.
+Postbeam is the only connector this routine needs.
 
-- If the Postbeam tools are missing or the call fails on sign-in, say that Postbeam needs to be connected first and where to do it: in the Claude app, Customize → Plugins → Postbeam Starter → Connectors, then Add or Connect next to Postbeam; in Claude Code, `/mcp`. Stop there. Nothing below works without it.
-- If they have more than one account, ask which one this routine is for. Each account has its own voice training, so a routine belongs to one account. Someone managing several accounts repeats the setup for each.
+1. Look for the Postbeam tools, such as `list_accounts`, `get_training` and `create_draft`. Their names may carry a prefix that differs between apps, for example `mcp__postbeam__list_accounts`, so match on the tool name, not the prefix. Other connectors can have a `list_accounts` of their own, so use the one that sits alongside `get_training` and `create_draft`.
+2. If they are there, call `list_accounts`.
+3. If the tools are missing, or the call fails on sign-in, read `references/connect-postbeam.md`, give the user only the section for their environment, and stop until they say it is done. Then try `list_accounts` once more.
+4. If it still fails, say what failed in one sentence and suggest restarting the app, because most agents only load a newly added connector after a restart. Do not go past this step without Postbeam. Nothing below works without it.
+
+If they have more than one account, ask which one this routine is for. Each account has its own voice training, so a routine belongs to one account. Someone managing several accounts repeats the setup for each.
 
 ## 2. Check their voice training
 
@@ -40,7 +57,7 @@ First check which work tools are already connected in this session. Then show th
 - **Anything else already connected** that holds their work, such as a calendar, a CRM or documents.
 - **None of them.** The interview path below.
 
-If you cannot tell which tools they use, ask before naming connectors, so someone on Outlook is not offered Gmail. Granola, Fireflies, Slack, Gmail and Microsoft 365 are listed with this plugin. Microsoft 365 is how Outlook and Teams connect. It is one connector that also covers their calendar and files, so ask which parts the routine may read. Any other tool works the same way once it is connected in Claude, and most recorders have a connector of their own.
+If you cannot tell which tools they use, ask before naming connectors, so someone on Outlook is not offered Gmail. Any tool works once it is connected where they are running, and most recorders have a connector of their own. In the Claude app, Outlook and Teams connect through the Microsoft 365 connector. It is one connector that also covers their calendar and files, so ask which parts the routine may read.
 
 If you have a tool for asking multiple-choice questions, use it here and allow several answers.
 
@@ -54,9 +71,9 @@ Make the choice easy to trust:
 For each tool they pick that is not connected yet, help them connect it. You cannot sign in for them.
 
 - If this session can show connector suggestions with a connect button, show the ones they picked.
-- Otherwise say where to do it. For Granola, Fireflies, Slack, Gmail and Microsoft 365 (Outlook and Teams): in the Claude app, Customize → Plugins → Postbeam Starter → Connectors, then Add or Connect next to the tool. For any other tool: Customize → Connectors, then search for it. In Claude Code, `/mcp`.
-- If the app says they cannot add a connector, their workspace owner has to add it first. Microsoft 365 on a work account may also need their Microsoft admin to approve it once. Carry on without it.
-- If their tool has no connector in Claude, say so plainly. They can still paste notes or a transcript into the chat each week, or answer the interview questions for that part.
+- Otherwise read `references/connect-tools.md` and give them the steps for their environment. Postbeam Starter, if it is installed as a plugin, gives some tools a connect button of their own, and that file says which.
+- If they are not allowed to add a connector, someone at their company has to approve it first. Carry on without it.
+- If their tool has no connector where they are running, say so plainly. They can still paste notes or a transcript into the chat each week, or answer the interview questions for that part.
 - When they say it is done, check with one small read. If a newly connected tool does not show up in this conversation, don't stall: finish the setup with what is available, and tell them that running this setup again later adds the new tool to the routine.
 
 An optional tool is never a condition for finishing. Someone who connects only Postbeam still gets a working routine through the interview path.
@@ -95,7 +112,8 @@ Real drafts in their own account are what make the routine worth keeping. The fi
 Fill in the routine prompt template with everything agreed. Then:
 
 - If this session has a tool for scheduled or recurring tasks, confirm the day, time and timezone once more and create a weekly task with the filled-in prompt. Pass on any caveat the tool reports, for example that tasks only run while the app is open.
-- If it has none, give them the filled-in prompt in a code block. Tell them to save it and paste it into a new chat each week, or to add it as a scheduled task wherever their Claude offers that.
+- If it has none, give them the filled-in prompt in a code block. Tell them to save it and paste it into a new chat each week, or to add it as a scheduled task wherever their app offers that.
+- In an agent other than Claude, such as Cursor or Codex, also suggest saving the prompt as a reusable command or snippet there, so the weekly run is one step.
 
 Say it is scheduled only when a tool confirmed it.
 

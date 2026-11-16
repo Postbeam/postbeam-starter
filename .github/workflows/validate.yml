@@ -1,0 +1,101 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      DO_NOT_TRACK: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: JSON files parse
+        run: |
+          for f in .mcp.json .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
+            jq empty "$f"
+            echo "ok: $f"
+          done
+
+      - name: Versions match and have a changelog entry
+        run: |
+          plugin=$(jq -r '.version // empty' .claude-plugin/plugin.json)
+          market=$(jq -r '.plugins[] | select(.name == "postbeam-starter") | .version // empty' .claude-plugin/marketplace.json)
+          echo "plugin.json: ${plugin:-missing}"
+          echo "marketplace.json: ${market:-missing}"
+          if [ -z "$plugin" ] || [ "$plugin" != "$market" ]; then
+            echo "::error::version must be set and identical in plugin.json and marketplace.json"
+            exit 1
+          fi
+          if ! grep -qF "## [$plugin]" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::no entry for version $plugin"
+            exit 1
+          fi
+
+      - name: Connector addresses are production only
+        run: |
+          if grep -nEi 'ngrok|localhost|127\.0\.0\.1' .mcp.json; then
+            echo "::error file=.mcp.json::.mcp.json must contain production addresses only"
+            exit 1
+          fi
+          jq -e '.mcpServers.postbeam.url == "https://app.postbeam.ai/mcp"' .mcp.json > /dev/null
+
+      - name: Skills have a name and a description
+        run: |
+          status=0
+          for f in skills/*/SKILL.md; do
+            if [ "$(head -n 1 "$f")" != "---" ]; then
+              echo "::error file=$f::file must start with frontmatter"
+              status=1
+              continue
+            fi
+            front=$(awk 'NR > 1 && $0 == "---" { exit } NR > 1 { print }' "$f")
+            for key in name description; do
+              if ! printf '%s\n' "$front" | grep -qE "^$key: *[^ ]"; then
+                echo "::error file=$f::frontmatter is missing '$key'"
+                status=1
+              fi
+            done
+          done
+          exit $status
+
+      - name: Reference files named in a skill exist
+        run: |
+          status=0
+          for f in skills/*/SKILL.md; do
+            dir=$(dirname "$f")
+            for ref in $({ grep -oE 'references/[A-Za-z0-9_.-]+\.md' "$f" || true; } | sort -u); do
+              if [ ! -f "$dir/$ref" ]; then
+                echo "::error file=$f::$ref is named but does not exist"
+                status=1
+              fi
+            done
+          done
+          exit $status
+
+      - name: npx skills finds the skill
+        run: |
+          npx --yes skills add . --list | tee skills-list.txt
+          grep -q 'weekly-drafts' skills-list.txt
+
+      - name: Claude Code plugin validation
+        run: |
+          npm install --global @anthropic-ai/claude-code
+          if claude plugin validate --help > /dev/null 2>&1; then
+            claude plugin validate .
+          else
+            echo "This Claude Code version has no 'plugin validate' command. Skipping."
+          fi
