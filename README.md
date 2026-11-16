@@ -16,6 +16,8 @@ A Postbeam account is the only requirement. Every other connector is optional, a
 | Slack | Optional | Decisions, customer questions and wins from work channels |
 | Gmail | Optional | Threads with customers, prospects and partners |
 
+Use something else? Outlook and Teams (through the Microsoft 365 connector) and other recorders such as Fathom, Otter, Gong or Zoom work the same way. Connect the tool under **Customize**, then **Connectors**, and pick it during setup.
+
 If you would rather not connect any of the optional tools, the routine asks you a few short questions about your week instead and drafts from your answers.
 
 ## Install

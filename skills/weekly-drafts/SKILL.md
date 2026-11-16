@@ -32,13 +32,15 @@ Call `get_training` for the account. The routine can only write in their voice a
 
 Everything beyond Postbeam is optional, and the user picks: any of them, all of them, or none. This step decides whether they keep the routine, so take care with it.
 
-First check which of these are already connected in this session. Then show the options in one message, marking each as connected or not yet connected:
+First check which work tools are already connected in this session. Then show the options in one message, naming the tools they actually have and marking each as connected or not yet connected:
 
-- **Call recorder or meeting notes** (Granola, Fireflies, or another one they use). Usually the richest source and the least personal.
-- **Slack.** Decisions, customer questions and wins from work channels.
-- **Gmail.** Threads with customers, prospects and partners.
+- **Call recorder or meeting notes.** Granola or Fireflies, or whichever one they use, such as Fathom, Otter, Gong or Zoom. Usually the richest source and the least personal.
+- **Team chat.** Slack, or Microsoft Teams. Decisions, customer questions and wins from work channels.
+- **Email.** Gmail, or Outlook. Threads with customers, prospects and partners.
 - **Anything else already connected** that holds their work, such as a calendar, a CRM or documents.
 - **None of them.** The interview path below.
+
+If you cannot tell which tools they use, ask before naming connectors, so someone on Outlook is not offered Gmail. Granola, Fireflies, Slack and Gmail are listed with this plugin. Any other tool works the same way once it is connected in Claude: Outlook and Teams come through the Microsoft 365 connector, and most recorders have a connector of their own.
 
 If you have a tool for asking multiple-choice questions, use it here and allow several answers.
 
@@ -52,8 +54,9 @@ Make the choice easy to trust:
 For each tool they pick that is not connected yet, help them connect it. You cannot sign in for them.
 
 - If this session can show connector suggestions with a connect button, show the ones they picked.
-- Otherwise say where to do it: in the Claude app, Customize → Plugins → Postbeam Starter → Connectors, then Add or Connect next to the tool; in Claude Code, `/mcp`.
+- Otherwise say where to do it. For Granola, Fireflies, Slack and Gmail: in the Claude app, Customize → Plugins → Postbeam Starter → Connectors, then Add or Connect next to the tool. For any other tool: Customize → Connectors, then search for it. In Claude Code, `/mcp`.
 - If the app says they cannot add a connector, their workspace owner has to add it first. Carry on without it.
+- If their tool has no connector in Claude, say so plainly. They can still paste notes or a transcript into the chat each week, or answer the interview questions for that part.
 - When they say it is done, check with one small read. If a newly connected tool does not show up in this conversation, don't stall: finish the setup with what is available, and tell them that running this setup again later adds the new tool to the routine.
 
 An optional tool is never a condition for finishing. Someone who connects only Postbeam still gets a working routine through the interview path.
