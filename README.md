@@ -4,6 +4,8 @@ Get fresh LinkedIn drafts in [Postbeam](https://www.postbeam.ai) every week, wri
 
 Postbeam Starter is a guided setup for Claude and other AI agents. It connects the agent to your Postbeam account, asks which of your work tools it may read, writes a first batch of drafts with you, and then schedules the routine so new drafts are waiting each week. Nothing is ever published or scheduled to LinkedIn by the routine. Every post waits in Postbeam as a draft until you approve it.
 
+To see it before you install, jump to [what the setup looks like](#what-the-setup-looks-like).
+
 ## Install
 
 ### Claude app (recommended)
@@ -87,6 +89,30 @@ or type `/weekly-drafts`. In Claude Code with the plugin installed, the command 
 Each week the routine picks moments worth posting about (a story from a call, an opinion you shared, a lesson from a deal or pitch, a question you keep getting asked), writes one draft per moment, saves them to Postbeam with a note on where each idea came from, and sends you a short summary.
 
 To change the schedule, add a tool or stop the routine, run the setup again.
+
+### What the setup looks like
+
+The whole setup is a short chat. These five pictures show a first setup in Claude. They are examples with sample data, so the wording you see will differ.
+
+**You ask for it.** Claude checks that Postbeam is connected and asks which account the routine is for.
+
+![Claude confirms Postbeam is connected and asks which of two accounts the routine is for](docs/setup/1-start.png)
+
+**You choose what it may read.** Meeting notes, team chat, email, or none of them. Anything you decline is never read.
+
+![A list of optional tools with checkboxes, and a summary of what the routine reads and never reads](docs/setup/2-choose-what-it-reads.png)
+
+**You agree the routine.** How many drafts, which day, and what must always stay out.
+
+![Claude proposes three drafts a week on Monday at 8:00, and the user changes the day and adds an off-limits topic](docs/setup/3-agree-the-routine.png)
+
+**You see the ideas before anything is written.** Then the first drafts are saved to Postbeam.
+
+![Claude lists three moments from the past week with their sources, then saves three drafts to Postbeam](docs/setup/4-first-drafts.png)
+
+**It is scheduled.** You get a recap of what it reads, when it runs and how to stop it.
+
+![A recap of the routine: account, schedule, what it reads and never reads, and where the drafts appear](docs/setup/5-scheduled-recap.png)
 
 ## Update
 
