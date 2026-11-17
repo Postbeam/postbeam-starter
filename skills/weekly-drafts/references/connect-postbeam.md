@@ -1,8 +1,8 @@
 # Connect Postbeam
 
-Postbeam is a remote MCP server (HTTP) with sign-in. Its name is `postbeam` and its address is `https://app.postbeam.ai/mcp`.
+Postbeam is a remote MCP server (HTTP) with OAuth sign-in. Its name is `postbeam` and its address is `https://app.postbeam.ai/mcp`.
 
-Give the user only the section for where they are running. Every path ends with them signing in to Postbeam in a browser window, which you cannot do for them. When they say it is done, try `list_accounts` again.
+Every path ends with the user signing in to Postbeam in a browser window, which you cannot do for them.
 
 ## Claude app (web, desktop, mobile, Cowork)
 
@@ -58,4 +58,4 @@ The Codex CLI, IDE extension and desktop app share this setup. In the desktop ap
 
 ## Something else
 
-Tell them Postbeam is a remote MCP server that uses HTTP and sign-in (OAuth), with the name `postbeam` and the address `https://app.postbeam.ai/mcp`, and ask them to add it the way their agent adds MCP servers. Most agents need a restart afterwards.
+Give them the facts at the top of this file and ask them to add Postbeam the way their agent adds MCP servers. Most agents need a restart afterwards.
