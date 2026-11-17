@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "postbeam-starter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Get fresh LinkedIn drafts in Postbeam every week, written in your voice from your real week. A guided setup connects Postbeam, lets you choose which work tools may be read (call recorder, Slack, Gmail or Outlook, or none), and creates the weekly routine.",
   "author": {
     "name": "Postbeam",

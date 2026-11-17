@@ -61,11 +61,11 @@ A Postbeam account is the only requirement. Every other connector is optional, a
 | Fireflies | Optional | Call transcripts from the past week |
 | Slack | Optional | Decisions, customer questions and wins from work channels |
 | Gmail | Optional | Threads with customers, prospects and partners |
-| Microsoft 365 | Optional | Outlook email and Teams chats, for people who don't use Gmail or Slack |
+| Microsoft 365 | Optional | Outlook email and Teams chats, for people who don't use Gmail or Slack. Connect it at **Customize**, then **Connectors** |
 
 The plugin lists the optional connectors so that each one has its own Connect button in the Claude app. In Claude Code they appear in `/mcp` as needing sign-in until you connect them, and you can leave the ones you don't use.
 
-On a work Microsoft account, your IT admin may need to approve the Microsoft 365 connector once before you can connect it.
+Microsoft 365 isn't bundled with the plugin, so it has no Connect button on the plugin's **Connectors** tab. Connect it at **Customize**, then **Connectors**, and pick it during setup. On a work Microsoft account, your IT admin may need to approve it once before you can connect it.
 
 Use a different call recorder? Fathom, Otter, Gong, Zoom and others work the same way. Connect the tool in your app and pick it during setup.
 

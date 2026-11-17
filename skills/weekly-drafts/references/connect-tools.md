@@ -4,10 +4,10 @@ Steps for connecting the optional tools the user picked, by where they are runni
 
 ## Claude app (web, desktop, mobile, Cowork)
 
-- If Postbeam Starter is installed as a plugin: Granola, Fireflies, Slack, Gmail and Microsoft 365 are listed at Customize → Plugins → Postbeam Starter → Connectors. They select Add or Connect next to the tool.
+- If Postbeam Starter is installed as a plugin: Granola, Fireflies, Slack and Gmail are listed at Customize → Plugins → Postbeam Starter → Connectors. They select Add or Connect next to the tool.
 - For any other tool, or without the plugin: Customize → Connectors, search for the tool, then Connect.
 
-Outlook and Teams connect through Microsoft 365, one connector that also covers calendar and files. On a work Microsoft account, their Microsoft admin may have to approve it once. If the app says they cannot add a connector at all, their workspace owner has to add it first.
+Outlook and Teams connect through the Microsoft 365 connector at Customize → Connectors (it is not one of the plugin's connectors), one connector that also covers calendar and files. On a work Microsoft account, their Microsoft admin may have to approve it once. If the app says they cannot add a connector at all, their workspace owner has to add it first.
 
 ## ChatGPT (web, desktop, mobile)
 
@@ -17,7 +17,7 @@ Outlook and Teams connect through Microsoft 365, one connector that also covers 
 
 ## Claude Code
 
-- Check `/mcp` first. It lists the tools that come with Postbeam Starter when it is installed as a plugin (`granola`, `fireflies`, `slack`, `gmail`, `microsoft365`) and the connectors already on their Claude account. They pick the tool and authenticate. The ones they don't want can stay unauthenticated.
+- Check `/mcp` first. It lists the tools that come with Postbeam Starter when it is installed as a plugin (`granola`, `fireflies`, `slack`, `gmail`) and the connectors already on their Claude account, including Microsoft 365 if they connected it in the Claude app. They pick the tool and authenticate. The ones they don't want can stay unauthenticated.
 - For a tool that is not listed, they follow that tool's own MCP setup instructions and add it with `claude mcp add`.
 
 ## Cursor, Codex or something else
