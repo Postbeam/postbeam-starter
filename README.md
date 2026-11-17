@@ -26,6 +26,12 @@ If Postbeam Starter appears under **Discover**, add it from there instead of add
 
 Then run `/mcp`, pick `postbeam` and sign in.
 
+### ChatGPT
+
+Postbeam Starter is not in the ChatGPT plugin directory yet. OpenAI is not accepting skills-only plugins there at the moment. The package for it is ready in this repository (`plugin.json`), and the setup already knows the ChatGPT steps for connecting Postbeam and your other tools.
+
+In Codex, install the setup with the `npx skills` command below.
+
 ### Cursor, Codex and other agents
 
 ```bash
@@ -55,7 +61,7 @@ A Postbeam account is the only requirement. Every other connector is optional, a
 | Gmail | Optional | Threads with customers, prospects and partners |
 | Microsoft 365 | Optional | Outlook email and Teams chats, for people who don't use Gmail or Slack |
 
-The plugin lists the five optional connectors so that each one has its own Connect button in the Claude app. In Claude Code they appear in `/mcp` as needing sign-in until you connect them, and you can leave the ones you don't use.
+The plugin lists the optional connectors so that each one has its own Connect button in the Claude app. In Claude Code they appear in `/mcp` as needing sign-in until you connect them, and you can leave the ones you don't use.
 
 On a work Microsoft account, your IT admin may need to approve the Microsoft 365 connector once before you can connect it.
 
@@ -106,7 +112,7 @@ Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 - The agent reads only the tools you approve during setup, read-only, for the past week. Tools you decline are written into the routine as never to be read.
 - Client names, private numbers and deal terms are left out of drafts unless they are already public.
 - Drafts and their source notes are sent to your Postbeam account through `app.postbeam.ai`. Sign-in is OAuth, and no credentials ship with the plugin or the skill.
-- The optional connectors (Granola, Fireflies, Slack, Gmail and Microsoft 365) are not run by Postbeam. Connecting one signs you in to that connector under its own terms.
+- The optional connectors are not run by Postbeam. Connecting one signs you in to that connector under its own terms.
 - Postbeam's [privacy policy](https://www.postbeam.ai/privacy-policy) covers what Postbeam does with your drafts and account data.
 
 ## Support

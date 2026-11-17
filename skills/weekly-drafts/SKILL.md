@@ -1,6 +1,6 @@
 ---
 name: weekly-drafts
-description: Set up a weekly LinkedIn drafting routine with Postbeam, so fresh drafts built from the user's real week (calls, meetings, Slack, email) are waiting in Postbeam every week. Walks the user through connecting Postbeam, choosing which optional work tools Claude may read, and scheduling the routine. Use right after someone installs or connects Postbeam and asks how to get started or what to do next, and whenever they want recurring, automatic or scheduled LinkedIn drafts, a "Monday content routine", or posts written from their week without having to ask each time. Also use to change, pause or re-run a routine set up earlier, or to add another tool to it.
+description: Set up a weekly LinkedIn drafting routine with Postbeam, so fresh drafts built from the user's real week (calls, meetings, Slack, email) are waiting in Postbeam every week. Walks the user through connecting Postbeam, choosing which optional work tools may be read, and scheduling the routine. Use right after someone installs or connects Postbeam and asks how to get started or what to do next, and whenever they want recurring, automatic or scheduled LinkedIn drafts, a "Monday content routine", or posts written from their week without having to ask each time. Also use to change, pause or re-run a routine set up earlier, or to add another tool to it.
 ---
 
 # Weekly drafts
@@ -15,28 +15,28 @@ Setup is finished when three things are true:
 
 The people using this are mostly founders and executives, not engineers. Keep it conversational: plain words, one question at a time, and a sensible default with every question so they can just say yes. The whole setup should cost them about five minutes of attention.
 
+The user's explicit instructions come before the defaults in this skill. The fixed rules are the ones marked never: the routine does not publish, schedule or approve posts, does not read a tool the user declined, and does not invent material.
+
 If they came back to change, pause or re-run a routine they already have, or to add another tool to it, skip to the step that covers it. Find the existing routine with the scheduling tool if there is one; otherwise hand them an edited prompt.
 
 ## Where you are running
 
-This skill gets installed in several ways: as the Postbeam Starter plugin in the Claude app, as a Claude Code plugin, or as a plain skill in Claude Code, Cursor, Codex or another agent. The routine is the same everywhere. What differs is how the user connects Postbeam and their other tools.
+This skill gets installed in several ways: as the Postbeam Starter plugin in the Claude app, ChatGPT or Claude Code, or as a plain skill in Claude Code, Cursor, Codex or another agent. The routine is the same everywhere. What differs is how the user connects Postbeam and their other tools.
 
-If you know which app you are running in, use that. If you don't, ask the user one question with these choices: Claude app (web, desktop or mobile), Claude Code, Cursor, Codex, something else. You only need the answer when something has to be connected, so skip the question when everything they want is already available.
+If you know which app you are running in, use that. If you don't, ask the user one question with these choices: Claude app, ChatGPT, Claude Code, Cursor, Codex, something else. You only need the answer when something has to be connected, so skip the question when everything they want is already available.
 
-The connection steps are in two files in this skill's folder, each with one section per environment:
+The connection steps are in two files in this skill's folder, each split into sections by where the user is running:
 
 - `references/connect-postbeam.md` for Postbeam itself.
 - `references/connect-tools.md` for the optional tools.
 
-Read the file when you need it, and give the user only the section that matches where they are.
+Read a file only when something has to be connected, and give the user only the section that matches where they are.
 
 ## 1. Check Postbeam is connected
 
-Postbeam is the only connector this routine needs.
-
 1. Look for the Postbeam tools, such as `list_accounts`, `get_training` and `create_draft`. Their names may carry a prefix that differs between apps, for example `mcp__postbeam__list_accounts`, so match on the tool name, not the prefix. Other connectors can have a `list_accounts` of their own, so use the one that sits alongside `get_training` and `create_draft`.
 2. If they are there, call `list_accounts`.
-3. If the tools are missing, or the call fails on sign-in, read `references/connect-postbeam.md`, give the user only the section for their environment, and stop until they say it is done. Then try `list_accounts` once more.
+3. If the tools are missing, or the call fails on sign-in, give the user their steps from `references/connect-postbeam.md` and stop until they say it is done. Then try `list_accounts` once more.
 4. If it still fails, say what failed in one sentence and suggest restarting the app, because most agents only load a newly added connector after a restart. Do not go past this step without Postbeam. Nothing below works without it.
 
 If they have more than one account, ask which one this routine is for. Each account has its own voice training, so a routine belongs to one account. Someone managing several accounts repeats the setup for each.
@@ -57,7 +57,7 @@ First check which work tools are already connected in this session. Then show th
 - **Anything else already connected** that holds their work, such as a calendar, a CRM or documents.
 - **None of them.** The interview path below.
 
-If you cannot tell which tools they use, ask before naming connectors, so someone on Outlook is not offered Gmail. Any tool works once it is connected where they are running, and most recorders have a connector of their own. In the Claude app, Outlook and Teams connect through the Microsoft 365 connector. It is one connector that also covers their calendar and files, so ask which parts the routine may read.
+If you cannot tell which tools they use, ask before naming connectors, so someone on Outlook is not offered Gmail. Any tool works once it is connected where they are running, and most recorders have a connector of their own. Where one connector also covers their calendar and files, ask which parts the routine may read.
 
 If you have a tool for asking multiple-choice questions, use it here and allow several answers.
 
@@ -71,12 +71,14 @@ Make the choice easy to trust:
 For each tool they pick that is not connected yet, help them connect it. You cannot sign in for them.
 
 - If this session can show connector suggestions with a connect button, show the ones they picked.
-- Otherwise read `references/connect-tools.md` and give them the steps for their environment. Postbeam Starter, if it is installed as a plugin, gives some tools a connect button of their own, and that file says which.
+- Otherwise give them their steps from `references/connect-tools.md`.
 - If they are not allowed to add a connector, someone at their company has to approve it first. Carry on without it.
 - If their tool has no connector where they are running, say so plainly. They can still paste notes or a transcript into the chat each week, or answer the interview questions for that part.
 - When they say it is done, check with one small read. If a newly connected tool does not show up in this conversation, don't stall: finish the setup with what is available, and tell them that running this setup again later adds the new tool to the routine.
 
 An optional tool is never a condition for finishing. Someone who connects only Postbeam still gets a working routine through the interview path.
+
+Keep two lists: what the routine reads, and what it never reads. Both go into the routine prompt, because a scheduled run starts with no memory of this conversation and would otherwise treat every connected tool as fair game.
 
 ### The interview path
 
@@ -88,8 +90,6 @@ If they pick none, or nothing is connected, the routine asks a few short questio
 - What question do you keep getting asked?
 
 Weekly works, and so does every couple of weeks. Postbeam's voice interview covers the same ground by talking instead of typing; mention it if they would rather speak.
-
-Keep two lists: what the routine reads, and what it never reads. Both go into the routine prompt, because a scheduled run starts with no memory of this conversation and would otherwise treat every connected tool as fair game.
 
 ## 4. Agree on the routine
 
@@ -103,7 +103,7 @@ Propose the defaults in one short message and ask what they would change:
 
 ## 5. Do the first run together
 
-Run the weekly procedure below now, with one difference: after picking the moments, show them to the user (one line each, plus where each came from) and let them swap any out before you write.
+Run the weekly procedure below now, with two differences. Reuse the training you loaded in step 2 instead of calling `get_training` again. And after picking the moments, show them to the user (one line each, plus where each came from) and let them swap any out before you write.
 
 Real drafts in their own account are what make the routine worth keeping. The first run also surfaces wrong assumptions, such as a source that is too noisy or a rule that is missing, before they are baked into the schedule.
 
@@ -112,8 +112,8 @@ Real drafts in their own account are what make the routine worth keeping. The fi
 Fill in the routine prompt template with everything agreed. Then:
 
 - If this session has a tool for scheduled or recurring tasks, confirm the day, time and timezone once more and create a weekly task with the filled-in prompt. Pass on any caveat the tool reports, for example that tasks only run while the app is open.
-- If it has none, give them the filled-in prompt in a code block. Tell them to save it and paste it into a new chat each week, or to add it as a scheduled task wherever their app offers that.
-- In an agent other than Claude, such as Cursor or Codex, also suggest saving the prompt as a reusable command or snippet there, so the weekly run is one step.
+- If it has none, give them the filled-in prompt in a code block. Tell them to add it as a scheduled task if their app offers that. If it does not, they can save it as a reusable command or snippet so the weekly run is one step, or paste it into a new chat each week.
+- In ChatGPT, create the task from Work mode when the user has it, because scheduled tasks created there can use plugins such as Postbeam. Tell them the task and its runs are listed under Scheduled in the sidebar.
 
 Say it is scheduled only when a tool confirmed it.
 
@@ -125,7 +125,7 @@ Close with a short recap they could forward to a colleague: which account, when 
 
 1. Call `get_training` and `get_rejection_feedback` for the account. The training is the hard rules for voice and format. The rejection feedback is the list of mistakes not to repeat.
 2. Call `list_posts` for their recent drafts and posts, so this week does not repeat an idea they already have.
-3. Read the approved sources for the lookback window, and only those. On the interview path, ask the questions and wait for the answers instead.
+3. Read the approved sources for the lookback window, and only those. On the interview path, ask the questions in one message and wait for the answers instead.
 4. Pick the moments: a story from a call, an opinion they voiced, a lesson from a deal or pitch, or a question they were asked that others in their audience probably have too. Prefer a moment with a concrete detail (a number, a quote, a turn of events) over a general theme.
 5. Write one draft per moment, each built around one idea and one real detail from the source. Make it ready to publish, with no placeholders.
 6. Do a privacy pass. Remove client names, private numbers and deal terms unless they are already public, and apply the off-limits list. When unsure whether something is public, anonymize it: "a customer in logistics" still tells the story.

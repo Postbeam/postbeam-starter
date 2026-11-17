@@ -14,6 +14,7 @@ defaults:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       DO_NOT_TRACK: "1"
     steps:
@@ -25,25 +26,43 @@ jobs:
 
       - name: JSON files parse
         run: |
-          for f in .mcp.json .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
+          for f in $(git ls-files '*.json'); do
             jq empty "$f"
             echo "ok: $f"
           done
 
       - name: Versions match and have a changelog entry
         run: |
-          plugin=$(jq -r '.version // empty' .claude-plugin/plugin.json)
-          market=$(jq -r '.plugins[] | select(.name == "postbeam-starter") | .version // empty' .claude-plugin/marketplace.json)
-          echo "plugin.json: ${plugin:-missing}"
-          echo "marketplace.json: ${market:-missing}"
-          if [ -z "$plugin" ] || [ "$plugin" != "$market" ]; then
-            echo "::error::version must be set and identical in plugin.json and marketplace.json"
+          openai=$(jq -r '.version // empty' plugin.json)
+          claude=$(jq -r '.version // empty' .claude-plugin/plugin.json)
+          echo "plugin.json: ${openai:-missing}"
+          echo ".claude-plugin/plugin.json: ${claude:-missing}"
+          if [ -z "$claude" ] || [ "$claude" != "$openai" ]; then
+            echo "::error::version must be set and identical in plugin.json and .claude-plugin/plugin.json"
             exit 1
           fi
-          if ! grep -qF "## [$plugin]" CHANGELOG.md; then
-            echo "::error file=CHANGELOG.md::no entry for version $plugin"
+          if ! grep -qF "## [$claude]" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::no entry for version $claude"
             exit 1
           fi
+
+      - name: Marketplace entry matches the Claude manifest
+        run: |
+          # The entry must carry the version, and agree with the manifest on every field both set.
+          differs=$(jq -r --slurpfile m .claude-plugin/plugin.json '
+            $m[0] as $manifest
+            | .plugins[] | select(.source == "./") as $entry
+            | (["version"] + ($entry | keys) | unique[]) as $key
+            | select(($manifest | has($key)) and $manifest[$key] != $entry[$key])
+            | $key
+          ' .claude-plugin/marketplace.json)
+          if [ -n "$differs" ]; then
+            echo "::error file=.claude-plugin/marketplace.json::differs from .claude-plugin/plugin.json in:" $differs
+            exit 1
+          fi
+
+      - name: Both listings use the same icon
+        run: cmp .claude-plugin/icon.png assets/icon.png
 
       - name: Connector addresses are production only
         run: |
@@ -86,6 +105,16 @@ jobs:
           done
           exit $status
 
+      - name: Bundled connectors are named in the connect steps
+        run: |
+          steps=skills/weekly-drafts/references/connect-tools.md
+          for server in $(jq -r '.mcpServers | keys[] | select(. != "postbeam")' .mcp.json); do
+            if ! grep -qF "\`$server\`" "$steps"; then
+              echo "::error file=$steps::$server is in .mcp.json but not named here"
+              exit 1
+            fi
+          done
+
       - name: npx skills finds the skill
         run: |
           npx --yes skills add . --list | tee skills-list.txt
@@ -94,8 +123,39 @@ jobs:
       - name: Claude Code plugin validation
         run: |
           npm install --global @anthropic-ai/claude-code
-          if claude plugin validate --help > /dev/null 2>&1; then
-            claude plugin validate .
-          else
-            echo "This Claude Code version has no 'plugin validate' command. Skipping."
-          fi
+          claude plugin validate .
+
+      - name: ChatGPT listing fields fit the directory limits
+        run: |
+          jq -e '
+            def fits($max): length > 0 and length <= $max;
+            .["$schema"] == "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+            and (.name | test("^[a-z0-9]+(-[a-z0-9]+)*$")) and (.name | length) <= 64
+            and (.extensions["com.openai"].interface as $i
+              | ($i.displayName | fits(30))
+              and ($i.shortDescription | fits(30))
+              and ($i.longDescription | fits(4000))
+              and ($i.developerName | fits(80))
+              and ($i.category | length) > 0
+              and ($i.defaultPrompt | length) <= 3
+              and ($i.defaultPrompt | all(length <= 128))
+              and ([$i.websiteURL, $i.supportURL, $i.privacyPolicyURL, $i.termsOfServiceURL] | all(startswith("https://"))))
+          ' plugin.json > /dev/null
+          echo "ok: plugin.json"
+
+      - name: Build the ChatGPT package and check it holds the files plugin.json points to
+        run: |
+          package="dist/postbeam-starter-$(jq -r '.version' plugin.json).zip"
+          mkdir -p dist
+          zip -r -X "$package" plugin.json skills assets LICENSE README.md
+          unzip -l "$package"
+          unzip -q "$package" -d dist/unpacked
+          for path in $(jq -r '.extensions["com.openai"] | .onboardingSkill, .interface.composerIcon, .interface.logo' plugin.json); do
+            test -f "dist/unpacked/$path" || { echo "::error file=plugin.json::points to a file that is not in the package: $path"; exit 1; }
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: postbeam-starter-chatgpt-package
+          path: dist/*.zip
+          if-no-files-found: error
