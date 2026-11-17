@@ -2,6 +2,16 @@
 
 All notable changes to Postbeam Starter. Versions follow [semantic versioning](https://semver.org), and each release is tagged `v{version}`.
 
+## [1.2.1] - 2026-11-17
+
+### Removed
+
+- Microsoft 365 is no longer bundled with the plugin. Its address is hosted by Anthropic, and the Claude directory accepts Anthropic-hosted connector addresses only from Verified organizations. People who use Outlook or Teams connect Microsoft 365 at Customize → Connectors, and the setup uses it the same way.
+
+### Changed
+
+- The checks now also refuse Anthropic-hosted connector addresses in `.mcp.json`.
+
 ## [1.2.0] - 2026-11-16
 
 ### Added
