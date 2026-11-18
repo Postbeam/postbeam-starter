@@ -56,6 +56,32 @@ In a company workspace, an admin may have to allow the plugin first.
 
 The Codex CLI, IDE extension and desktop app share this setup. In the desktop app the same thing is under Settings → MCP servers, with an Authenticate button. They can also add the Postbeam plugin from the Plugins Directory there, as in ChatGPT.
 
+## Gemini CLI
+
+- If Postbeam Starter is installed as an extension (`gemini extensions install https://github.com/Postbeam/postbeam-starter`), Postbeam is already set up. They start Gemini CLI, run `/mcp auth postbeam` and sign in.
+- If it is not, they run this in a terminal, then start Gemini CLI, run `/mcp auth postbeam` and sign in:
+
+  ```
+  gemini mcp add --transport http postbeam https://app.postbeam.ai/mcp
+  ```
+
+Sign-in opens a browser on the same computer, so it does not work over a remote SSH session.
+
+## Antigravity
+
+- If Postbeam Starter is installed as a plugin (from the Antigravity Marketplace, or with `agy plugin install https://github.com/Postbeam/postbeam-starter`), Postbeam is already set up. They sign in when Antigravity asks. In the Antigravity app, that is Authenticate next to Postbeam in the MCP Servers list. If the browser shows a code after sign-in, they paste it back into Antigravity.
+- If it is not, they add Postbeam to `~/.gemini/config/mcp_config.json` (all workspaces) or `.agents/mcp_config.json` in the workspace. If the file already lists other servers, `postbeam` goes next to them inside `mcpServers`:
+
+  ```json
+  {
+    "mcpServers": {
+      "postbeam": { "serverUrl": "https://app.postbeam.ai/mcp" }
+    }
+  }
+  ```
+
+  Then they reload the servers (`/mcp` in Antigravity CLI, or Restart next to the server in the app) and sign in when asked.
+
 ## Something else
 
 Give them the facts at the top of this file and ask them to add Postbeam the way their agent adds MCP servers. Most agents need a restart afterwards.

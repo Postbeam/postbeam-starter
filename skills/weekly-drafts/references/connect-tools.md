@@ -21,7 +21,7 @@ Outlook and Teams connect through Microsoft 365, which is not part of the plugin
 - For Outlook or Teams, they add Microsoft 365 in the Claude app (Customize → Connectors), signed in to the same Claude account. It then shows in `/mcp` with their other Claude connectors.
 - For a tool that is not listed, they follow that tool's own MCP setup instructions and add it with `claude mcp add`.
 
-## Cursor, Codex or something else
+## Cursor, Codex, Gemini CLI, Antigravity or something else
 
 - They follow the tool's own MCP setup page for their agent. Do not make up an address. If you are not sure one exists, tell them to search for "<tool> MCP server".
 - Some tools only offer a connector inside Claude, so theirs may have none for their agent.

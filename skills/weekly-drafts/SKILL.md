@@ -21,9 +21,9 @@ If they came back to change, pause or re-run a routine they already have, or to 
 
 ## Where you are running
 
-This skill gets installed in several ways: as the Postbeam Starter plugin in the Claude app, ChatGPT or Claude Code, or as a plain skill in Claude Code, Cursor, Codex or another agent. The routine is the same everywhere. What differs is how the user connects Postbeam and their other tools.
+This skill gets installed in several ways: as the Postbeam Starter plugin in the Claude app, ChatGPT, Claude Code or Antigravity, as an extension in Gemini CLI, or as a plain skill in Claude Code, Cursor, Codex or another agent. The routine is the same everywhere. What differs is how the user connects Postbeam and their other tools.
 
-If you know which app you are running in, use that. If you don't, ask the user one question with these choices: Claude app, ChatGPT, Claude Code, Cursor, Codex, something else. You only need the answer when something has to be connected, so skip the question when everything they want is already available.
+If you know which app you are running in, use that. If you don't, ask the user one question with these choices: Claude app, ChatGPT, Claude Code, Cursor, Codex, Gemini CLI, Antigravity, something else. You only need the answer when something has to be connected, so skip the question when everything they want is already available.
 
 The connection steps are in two files in this skill's folder, each split into sections by where the user is running:
 

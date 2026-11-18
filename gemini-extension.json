@@ -1,0 +1,10 @@
+{
+  "name": "postbeam-starter",
+  "version": "1.3.0",
+  "description": "Draft, review, schedule and track LinkedIn posts in your own voice with Postbeam, and set up weekly drafts written from your real working week.",
+  "mcpServers": {
+    "postbeam": {
+      "httpUrl": "https://app.postbeam.ai/mcp"
+    }
+  }
+}
