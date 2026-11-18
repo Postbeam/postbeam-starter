@@ -39,10 +39,14 @@ jobs:
         run: |
           openai=$(jq -r '.version // empty' plugin.json)
           claude=$(jq -r '.version // empty' .claude-plugin/plugin.json)
+          gemini=$(jq -r '.version // empty' gemini-extension.json)
+          antigravity=$(jq -r '.version // empty' .antigravity-plugin/plugin.json)
           echo "plugin.json: ${openai:-missing}"
           echo ".claude-plugin/plugin.json: ${claude:-missing}"
-          if [ -z "$claude" ] || [ "$claude" != "$openai" ]; then
-            echo "::error::version must be set and identical in plugin.json and .claude-plugin/plugin.json"
+          echo "gemini-extension.json: ${gemini:-missing}"
+          echo ".antigravity-plugin/plugin.json: ${antigravity:-missing}"
+          if [ -z "$claude" ] || [ "$claude" != "$openai" ] || [ "$claude" != "$gemini" ] || [ "$claude" != "$antigravity" ]; then
+            echo "::error::version must be set and identical in plugin.json, .claude-plugin/plugin.json, gemini-extension.json and .antigravity-plugin/plugin.json"
             exit 1
           fi
           if ! grep -qF "## [$claude]" CHANGELOG.md; then
@@ -70,11 +74,15 @@ jobs:
 
       - name: Connector addresses are production only
         run: |
-          if grep -nEi 'ngrok|localhost|127\.0\.0\.1' .mcp.json; then
-            echo "::error file=.mcp.json::.mcp.json must contain production addresses only"
-            exit 1
-          fi
+          for f in .mcp.json mcp_config.json gemini-extension.json; do
+            if grep -nEi 'ngrok|localhost|127\.0\.0\.1' "$f"; then
+              echo "::error file=$f::$f must contain production addresses only"
+              exit 1
+            fi
+          done
           jq -e '.mcpServers.postbeam.url == "https://app.postbeam.ai/mcp"' .mcp.json > /dev/null
+          jq -e '.mcpServers.postbeam.serverUrl == "https://app.postbeam.ai/mcp"' mcp_config.json > /dev/null
+          jq -e '.mcpServers.postbeam.httpUrl == "https://app.postbeam.ai/mcp"' gemini-extension.json > /dev/null
 
       - name: Connectors meet the Claude directory policy
         run: |
@@ -161,6 +169,27 @@ jobs:
               and ([$i.websiteURL, $i.supportURL, $i.privacyPolicyURL, $i.termsOfServiceURL] | all(startswith("https://"))))
           ' plugin.json > /dev/null
           echo "ok: plugin.json"
+
+      - name: Gemini CLI and Antigravity listing fields
+        run: |
+          # Gemini CLI wants a lowercase, dash-separated name. The Antigravity
+          # Marketplace asks for a kebab-case name, a brand display name without
+          # a platform prefix or a Plugin/MCP suffix, a 120 to 160 character
+          # description, at most three starter prompts and an https author URL.
+          jq -e '.name | test("^[a-z0-9]+(-[a-z0-9]+)*$")' gemini-extension.json > /dev/null
+          jq -e '
+            .["$schema"] == "https://antigravity.google/schemas/v1/plugin.json"
+            and (.name | test("^[a-z0-9]+(-[a-z0-9]+)*$"))
+            and (.displayName | length) > 0
+            and (.displayName | test("^(Antigravity|Gemini|Claude|Cursor)") | not)
+            and (.displayName | test("(Plugin|MCP)$") | not)
+            and (.description | length) >= 120 and (.description | length) <= 160
+            and (.suggestedPrompts | length) <= 3
+            and (.author.url | startswith("https://"))
+          ' .antigravity-plugin/plugin.json > /dev/null
+          logo=$(jq -r '.logo' .antigravity-plugin/plugin.json)
+          test -f "$logo" || { echo "::error file=.antigravity-plugin/plugin.json::logo $logo does not exist"; exit 1; }
+          echo "ok: gemini-extension.json, .antigravity-plugin/plugin.json"
 
       - name: Build the ChatGPT package and check it holds the files plugin.json points to
         run: |
