@@ -18,7 +18,11 @@ jobs:
     env:
       DO_NOT_TRACK: "1"
     steps:
+      # No step needs a token or secret. Keep the checkout token off disk so the
+      # npm packages run below cannot read it from .git/config.
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
@@ -71,6 +75,21 @@ jobs:
             exit 1
           fi
           jq -e '.mcpServers.postbeam.url == "https://app.postbeam.ai/mcp"' .mcp.json > /dev/null
+
+      - name: Connectors meet the Claude directory policy
+        run: |
+          # Each connector is the vendor's own public address, signed in with OAuth.
+          # No Anthropic-hosted addresses, and no client IDs, sign-in overrides,
+          # headers or environment values that would carry a credential.
+          if grep -nEi 'claude\.(ai|com)|anthropic\.com' .mcp.json; then
+            echo "::error file=.mcp.json::connectors hosted by Anthropic are refused by the Claude directory for unverified organizations"
+            exit 1
+          fi
+          extra=$(jq -r '.mcpServers | to_entries[] | .key as $name | .value | keys[] | select(. != "type" and . != "url") | "\($name).\(.)"' .mcp.json)
+          if [ -n "$extra" ]; then
+            echo "::error file=.mcp.json::connectors may set only type and url, found:" $extra
+            exit 1
+          fi
 
       - name: Skills have a name and a description
         run: |
