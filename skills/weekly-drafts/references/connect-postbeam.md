@@ -59,13 +59,13 @@ The Codex CLI, IDE extension and desktop app share this setup. In the desktop ap
 ## Gemini CLI
 
 - If Postbeam Starter is installed as an extension (`gemini extensions install https://github.com/Postbeam/postbeam-starter`), Postbeam is already set up. They start Gemini CLI, run `/mcp auth postbeam` and sign in.
-- If it is not, they run this in a terminal, then start Gemini CLI, run `/mcp auth postbeam` and sign in:
+- If it is not, they run this in a terminal, then start Gemini CLI, run `/mcp auth postbeam` and sign in. `--scope user` adds Postbeam for every folder; without it, the command fails in the home folder and in folders Gemini CLI doesn't trust:
 
   ```
-  gemini mcp add --transport http postbeam https://app.postbeam.ai/mcp
+  gemini mcp add --scope user --transport http postbeam https://app.postbeam.ai/mcp
   ```
 
-Sign-in opens a browser on the same computer, so it does not work over a remote SSH session.
+Gemini CLI starts no MCP servers in a folder it doesn't trust, so if `/mcp auth postbeam` finds nothing, they trust the folder they started it in. Sign-in opens a browser on the same computer, so it does not work over a remote SSH session.
 
 ## Antigravity
 
