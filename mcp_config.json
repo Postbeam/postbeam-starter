@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "postbeam": {
+      "serverUrl": "https://app.postbeam.ai/mcp"
+    }
+  }
+}

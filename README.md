@@ -42,6 +42,24 @@ npx skills add Postbeam/postbeam-starter
 
 Add `-g` to install it for all your projects instead of only the current one. This installs the setup skill on its own, without the Postbeam connector. The skill walks you through connecting Postbeam the first time you run it.
 
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/Postbeam/postbeam-starter
+```
+
+Then start Gemini CLI, run `/mcp auth postbeam` and sign in.
+
+### Antigravity
+
+Install it from this repository:
+
+```bash
+agy plugin install https://github.com/Postbeam/postbeam-starter
+```
+
+Then sign in to Postbeam when Antigravity asks. Once it is listed in the Antigravity Marketplace, you can add it from there instead.
+
 ### What each install gives you
 
 | Install | Setup skill | Postbeam connector | Optional tools |
@@ -49,6 +67,8 @@ Add `-g` to install it for all your projects instead of only the current one. Th
 | Claude app plugin | Yes | Included, with a Connect button | A Connect button for each |
 | Claude Code plugin | Yes | Included, sign in with `/mcp` | Listed in `/mcp` |
 | `npx skills` | Yes | You add it, and the skill shows you how | You add them, and the skill shows you how |
+| Gemini CLI extension | Yes | Included, sign in with `/mcp auth postbeam` | You add them, and the skill shows you how |
+| Antigravity plugin | Yes | Included, sign in when asked | You add them, and the skill shows you how |
 
 ## What you need
 

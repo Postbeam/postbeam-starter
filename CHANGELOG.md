@@ -2,6 +2,18 @@
 
 All notable changes to Postbeam Starter. Versions follow [semantic versioning](https://semver.org), and each release is tagged `v{version}`.
 
+## [1.3.0] - 2026-11-18
+
+### Added
+
+- A Gemini CLI extension: `gemini-extension.json` at the repository root. It bundles the Postbeam connector with the setup skill, and the repository carries the `gemini-cli-extension` topic so the Gemini CLI extensions gallery lists it.
+- An Antigravity plugin: `.antigravity-plugin/plugin.json` and `mcp_config.json`, with the listing text, logo and starter prompts the Antigravity Marketplace asks for.
+- Connect steps for Gemini CLI and Antigravity in the setup's reference files, and install steps in the README.
+
+### Changed
+
+- The checks keep the Gemini CLI and Antigravity manifests on the same version as the others, point them at the production Postbeam address, and check the Antigravity listing fields.
+
 ## [1.2.1] - 2026-11-17
 
 ### Removed
